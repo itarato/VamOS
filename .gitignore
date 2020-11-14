@@ -1,1 +1,5 @@
 i386elfgcc
+*.o
+*.bin
+*.dis
+
