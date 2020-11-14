@@ -15,11 +15,11 @@ call switch_to_protected_mode
 
 jmp $
 
-%include "util.asm"
-%include "util_pm.asm"
-%include "disk.asm"
-%include "gdt.asm"
-%include "pm_switch.asm"
+%include "boot/util.asm"
+%include "boot/util_pm.asm"
+%include "boot/disk.asm"
+%include "boot/gdt.asm"
+%include "boot/pm_switch.asm"
 
 [bits 16]
 load_kernel:
