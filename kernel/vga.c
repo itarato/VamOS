@@ -1,6 +1,7 @@
 #include "vga.h"
 
 #include "io.h"
+#include "mem.h"
 
 #define VGA_MEM_ADDR 0xb8000
 #define VGA_CTRL 0x3d4
@@ -12,6 +13,7 @@
 
 #define MODE_7_WIDTH 80
 #define MODE_7_HEIGHT 25
+#define MODE_7_TEXT_OFFS_LIM 2000
 
 uint_t vga_get_cursor() {
   io_byte_out(VGA_CTRL, CURSOR_POS_HI);
@@ -34,20 +36,39 @@ struct coord_t vga_get_cursor_coord() {
   return coord;
 }
 
+// TODO: Special chars.
 void vga_print_on_cursor(char* s) {
   uint_t pos = vga_get_cursor();
 
   int offs = pos << 1;
   char* mem = (char*)VGA_MEM_ADDR;
 
-  uint_t idx = 0;
   for (char* p_ch = s; *p_ch != 0; p_ch++) {
-    mem[offs + (2 * idx)] = *p_ch;
-    mem[offs + (2 * idx) + 1] = TEXT_BLACK_ON_WHITE;
-    idx++;
+    if (offs >= MODE_7_TEXT_OFFS_LIM * 2) {
+      offs -= 160;
+      vga_scroll();
+    }
+
+    if (*p_ch == '\n') {
+      offs += 160 - (offs % 160);
+      continue;
+    } else if (*p_ch == '\t') {
+      offs += 16 - (offs % 16);
+      continue;
+    }
+
+    mem[offs] = *p_ch;
+    mem[offs + 1] = TEXT_BLACK_ON_WHITE;
+
+    offs += 2;
   }
 
-  vga_set_cursor_to_offs(pos + idx);
+  vga_set_cursor_to_offs(offs >> 1);
+}
+
+void vga_printl_on_cursor(char* s) {
+  vga_print_on_cursor(s);
+  vga_new_line();
 }
 
 void vga_new_line() {
@@ -74,9 +95,14 @@ void vga_clear_screen() {
   int total = MODE_7_HEIGHT * MODE_7_WIDTH;
   char* mem = (char*)VGA_MEM_ADDR;
 
-  for (int i = 0; i < total; i++) {
-    mem[i * 2] = 0;
-  }
+  mem_set(VGA_MEM_ADDR, total * 2, 0);
+  // TODO: Fix missing cursor.
 
   vga_set_cursor(0, 0);
+}
+
+void vga_scroll() {
+  for (int i = 1; i < MODE_7_HEIGHT; i++) {
+    mem_copy(VGA_MEM_ADDR + i * 160, VGA_MEM_ADDR + (i - 1) * 160, 160);
+  }
 }

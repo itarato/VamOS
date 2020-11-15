@@ -2,7 +2,6 @@
 
 void main() {
   vga_clear_screen();
-  vga_print_on_cursor("VGA text mode initialized!");
-  vga_new_line();
-  vga_print_on_cursor("Waiting...");
+  vga_printl_on_cursor("Kernel:\n\tVGA text mode initialized!");
+  vga_printl_on_cursor("\tWaiting...");
 }
