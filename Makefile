@@ -20,10 +20,10 @@ kernel.dis: kernel.bin
 	ndisasm -b 32 $< > $@
 
 run: os-image.bin
-	${QEMU} -fda $<
+	${QEMU} -drive format=raw,media=disk,file=$<,index=0,if=floppy
 
 debug: os-image.bin kernel.elf
-	${QEMU} -s -S -fda $< &
+	${QEMU} -s -S -drive format=raw,media=disk,file=$<,index=0,if=floppy &
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf" -ex "b kernel/kernel.c:main"
 
 %.o: %.c ${C_HEADERS}
@@ -34,6 +34,9 @@ debug: os-image.bin kernel.elf
 
 %.bin: %.asm
 	nasm $< -f bin -o $@
+
+build: os-image.bin
+	echo Pass
 
 clean:
 	rm -rf *.bin *.o *.dis *.elf

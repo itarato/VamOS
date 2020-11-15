@@ -1,12 +1,8 @@
-void foo() {}
+#include "vga.h"
 
 void main() {
-  int a = 123;
-  int b = 0x1234;
-
-  char* name = "Steve";
-
-  char* video_mem = (char*)0xb8000;
-  *video_mem = 'X';
-  *(video_mem + 2) = 'Y';
+  vga_clear_screen();
+  vga_print_on_cursor("VGA text mode initialized!");
+  vga_new_line();
+  vga_print_on_cursor("Waiting...");
 }
