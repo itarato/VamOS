@@ -1,3 +1,5 @@
+; https://wiki.osdev.org/Global_Descriptor_Table
+
 gdt_start:
     dd 0x0
     dd 0x0
