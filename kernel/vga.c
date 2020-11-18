@@ -36,6 +36,7 @@ struct coord_t vga_get_cursor_coord() {
   return coord;
 }
 
+// TODO: Print format (numbers).
 // TODO: Special chars.
 void vga_print_on_cursor(char* s) {
   uint_t pos = vga_get_cursor();

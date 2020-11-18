@@ -1,6 +1,6 @@
 C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
 C_HEADERS = $(wildcard kernel/*.h drivers/*.h)
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o kernel/interrupt_table.o}
 CC = /home/itarato/code/os/i386elfgcc/bin/i386-elf-gcc
 # GDB = /home/itarato/code/os/i386elfgcc/bin/i386-elf-gdb
 GDB = /usr/bin/gdb
