@@ -17,3 +17,4 @@ void vga_clear_screen();
 void vga_set_cursor(uint_t y, uint_t x);
 void vga_set_cursor_to_offs(uint_t offs);
 void vga_scroll();
+void vga_print_hex(unsigned int n);

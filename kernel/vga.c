@@ -72,6 +72,29 @@ void vga_printl_on_cursor(char* s) {
   vga_new_line();
 }
 
+void vga_print_hex(unsigned int n) {
+  char hexword[11];
+  for (int i = 0; i < 11; i++) hexword[i] = 0;
+
+  hexword[0] = '0';
+  hexword[1] = 'x';
+
+  unsigned int len = 0;
+  for (; (n >> (len * 4)) > 0; len++)
+    ;
+
+  unsigned int i = 2;
+  for (; n > 0; n >>= 4) {
+    int hexdigit = n & 0xf;
+    hexword[3 + len - i] = hexdigit <= 9 ? '0' + hexdigit : 'a' + hexdigit;
+    i++;
+  }
+
+  if (i == 2) hexword[2] = '0';
+
+  vga_print_on_cursor(hexword);
+}
+
 void vga_new_line() {
   struct coord_t coord = vga_get_cursor_coord();
   vga_set_cursor(coord.y + 1, 0);

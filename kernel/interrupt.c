@@ -2,6 +2,42 @@
 
 #include "vga.h"
 
+char *interrupt_names[] = {"Division By Zero",
+                           "Debug",
+                           "Non Maskable Interrupt",
+                           "Breakpoint",
+                           "Into Detected Overflow",
+                           "Out of Bounds",
+                           "Invalid Opcode",
+                           "No Coprocessor",
+
+                           "Double Fault",
+                           "Coprocessor Segment Overrun",
+                           "Bad TSS",
+                           "Segment Not Present",
+                           "Stack Fault",
+                           "General Protection Fault",
+                           "Page Fault",
+                           "Unknown Interrupt",
+
+                           "Coprocessor Fault",
+                           "Alignment Check",
+                           "Machine Check",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved",
+                           "Reserved"};
+
 void enable_interrupts() {
   set_idt_gate(0, (uint_t)isr0);
   set_idt_gate(1, (uint_t)isr1);
@@ -40,8 +76,12 @@ void enable_interrupts() {
 }
 
 void global_isr_handler(isr_call_stack_t regs) {
-  vga_printl_on_cursor("Interrupt called");
-  //   vga_new_line();
+  vga_print_on_cursor("Interrupt called:\n\tID:");
+  vga_print_hex(regs.idx);
+  vga_print_on_cursor("\n\tERR:");
+  vga_print_hex(regs.err_no);
+  vga_print_on_cursor("\n\t");
+  vga_printl_on_cursor(interrupt_names[regs.idx]);
 }
 
 void set_idt_gate(unsigned int idx, uint_t handler) {

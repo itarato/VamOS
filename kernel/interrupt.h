@@ -1,3 +1,6 @@
+#ifndef INTERRUPT_H
+#define INTERRUPT_H
+
 #include "types.h"
 
 #define KERNEL_SEGMENT 0x8
@@ -79,3 +82,5 @@ idt_register_t idt_register;
 
 void set_idt_gate(unsigned int idx, uint_t handler);
 void set_idt_register();
+
+#endif  // INTERRUPT_H
