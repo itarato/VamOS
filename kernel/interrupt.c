@@ -1,6 +1,12 @@
 #include "interrupt.h"
 
+#include "io.h"
 #include "vga.h"
+
+#define PIC_MASTER_CMD 0x20
+#define PIC_MASTER_DATA 0x21
+#define PIC_SLAVE_CMD 0xA0
+#define PIC_SLAVE_DATA 0xA1
 
 char *interrupt_names[] = {"Division By Zero",
                            "Debug",
@@ -72,16 +78,56 @@ void enable_interrupts() {
   set_idt_gate(30, (uint_t)isr30);
   set_idt_gate(31, (uint_t)isr31);
 
+  io_byte_out(PIC_MASTER_CMD, 0x11);
+  io_byte_out(PIC_SLAVE_CMD, 0x11);
+  io_byte_out(PIC_MASTER_DATA, 0x20);
+  io_byte_out(PIC_SLAVE_DATA, 0x28);
+  io_byte_out(PIC_MASTER_DATA, 0x4);
+  io_byte_out(PIC_SLAVE_DATA, 0x2);
+  io_byte_out(PIC_MASTER_DATA, 0x1);
+  io_byte_out(PIC_SLAVE_DATA, 0x1);
+  io_byte_out(PIC_MASTER_DATA, 0x0);
+  io_byte_out(PIC_SLAVE_DATA, 0x0);
+
+  set_idt_gate(32, (uint_t)irq0);
+  set_idt_gate(33, (uint_t)irq1);
+  set_idt_gate(34, (uint_t)irq2);
+  set_idt_gate(35, (uint_t)irq3);
+  set_idt_gate(36, (uint_t)irq4);
+  set_idt_gate(37, (uint_t)irq5);
+  set_idt_gate(38, (uint_t)irq6);
+  set_idt_gate(39, (uint_t)irq7);
+  set_idt_gate(40, (uint_t)irq8);
+  set_idt_gate(41, (uint_t)irq9);
+  set_idt_gate(42, (uint_t)irq10);
+  set_idt_gate(43, (uint_t)irq11);
+  set_idt_gate(44, (uint_t)irq12);
+  set_idt_gate(45, (uint_t)irq13);
+  set_idt_gate(46, (uint_t)irq14);
+  set_idt_gate(47, (uint_t)irq15);
+
   set_idt_register();
 }
 
 void global_isr_handler(isr_call_stack_t regs) {
-  vga_print_on_cursor("Interrupt called:\n\tID:");
+  vga_print_on_cursor("Interrupt (ISR) called:\n\tID:");
   vga_print_hex(regs.idx);
   vga_print_on_cursor("\n\tERR:");
   vga_print_hex(regs.err_no);
   vga_print_on_cursor("\n\t");
   vga_printl_on_cursor(interrupt_names[regs.idx]);
+}
+
+void global_irq_handler(isr_call_stack_t regs) {
+  vga_print_on_cursor("Interrupt (IRQ) called:\n\tID:");
+  vga_print_hex(regs.idx);
+  vga_print_on_cursor("\n\tIRQ:");
+  vga_print_hex(regs.err_no);
+  vga_print_on_cursor("\n\t");
+  vga_printl_on_cursor(interrupt_names[regs.idx]);
+
+  if (regs.idx >= 40) io_byte_out(PIC_SLAVE_CMD, 0x20);
+  io_byte_out(PIC_MASTER_CMD, 0x20);
 }
 
 void set_idt_gate(unsigned int idx, uint_t handler) {
