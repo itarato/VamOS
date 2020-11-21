@@ -76,7 +76,7 @@ typedef struct {
   uint_t eflags;
   uint_t usersp;
   uint_t ss;
-} isr_call_stack_t;
+} isr_call_stack_t;  // TODO Rename this type.
 
 void enable_interrupts();
 void global_isr_handler(isr_call_stack_t regs);
@@ -100,5 +100,8 @@ idt_register_t idt_register;
 
 void set_idt_gate(unsigned int idx, uint_t handler);
 void set_idt_register();
+
+typedef void (*irq_callback_t)(isr_call_stack_t);
+void register_irq_handler(unsigned int irq_no, irq_callback_t handler);
 
 #endif  // INTERRUPT_H

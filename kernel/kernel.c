@@ -1,8 +1,13 @@
 #include "interrupt.h"
+#include "timer.h"
 #include "vga.h"
 
 void main() {
   enable_interrupts();
+
+  __asm__ volatile("sti");
+
+  timer_init(10);
 
   vga_clear_screen();
   vga_printl_on_cursor("Kernel:\n\tVGA text mode initialized!");

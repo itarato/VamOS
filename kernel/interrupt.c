@@ -8,6 +8,8 @@
 #define PIC_SLAVE_CMD 0xA0
 #define PIC_SLAVE_DATA 0xA1
 
+irq_callback_t irq_handlers[IDT_COUNT];
+
 char *interrupt_names[] = {"Division By Zero",
                            "Debug",
                            "Non Maskable Interrupt",
@@ -119,12 +121,16 @@ void global_isr_handler(isr_call_stack_t regs) {
 }
 
 void global_irq_handler(isr_call_stack_t regs) {
-  vga_print_on_cursor("Interrupt (IRQ) called:\n\tID:");
-  vga_print_hex(regs.idx);
-  vga_print_on_cursor("\n\tIRQ:");
-  vga_print_hex(regs.err_no);
-  vga_print_on_cursor("\n\t");
-  vga_printl_on_cursor(interrupt_names[regs.idx]);
+  if (irq_handlers[regs.err_no] > 0) {
+    irq_handlers[regs.err_no](regs);
+  } else {
+    vga_print_on_cursor("Interrupt (IRQ) called:\n\tID:");
+    vga_print_hex(regs.idx);
+    vga_print_on_cursor("\n\tIRQ:");
+    vga_print_hex(regs.err_no);
+    vga_print_on_cursor("\n\t");
+    vga_printl_on_cursor(interrupt_names[regs.idx]);
+  }
 
   if (regs.idx >= 40) io_byte_out(PIC_SLAVE_CMD, 0x20);
   io_byte_out(PIC_MASTER_CMD, 0x20);
@@ -142,4 +148,8 @@ void set_idt_register() {
   idt_register.base = (uint_t)&idt;
   idt_register.limit = IDT_COUNT * sizeof(idt_gate_t) - 1;
   __asm__ __volatile__("lidtl (%0)" : : "r"(&idt_register));
+}
+
+void register_irq_handler(unsigned int irq_no, irq_callback_t handler) {
+  irq_handlers[irq_no] = handler;
 }
