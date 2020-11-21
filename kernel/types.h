@@ -1,3 +1,3 @@
-typedef unsigned int uint_t;
-typedef unsigned char byte_t;
-typedef unsigned short word_t;
+typedef unsigned int u32;
+typedef unsigned char u8;
+typedef unsigned short u16;

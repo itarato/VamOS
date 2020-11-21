@@ -1,4 +1,5 @@
 #include "interrupt.h"
+#include "keyboard.h"
 #include "timer.h"
 #include "vga.h"
 
@@ -8,6 +9,7 @@ void main() {
   __asm__ volatile("sti");
 
   timer_init(10);
+  keyboard_init();
 
   vga_clear_screen();
   vga_printl_on_cursor("Kernel:\n\tVGA text mode initialized!");

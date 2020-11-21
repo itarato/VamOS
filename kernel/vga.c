@@ -15,9 +15,9 @@
 #define MODE_7_HEIGHT 25
 #define MODE_7_TEXT_OFFS_LIM 2000
 
-uint_t vga_get_cursor() {
+u32 vga_get_cursor() {
   io_byte_out(VGA_CTRL, CURSOR_POS_HI);
-  uint_t pos = io_byte_in(VGA_DATA);
+  u32 pos = io_byte_in(VGA_DATA);
   pos <<= 8;
 
   io_byte_out(VGA_CTRL, CURSOR_POS_LO);
@@ -27,7 +27,7 @@ uint_t vga_get_cursor() {
 }
 
 struct coord_t vga_get_cursor_coord() {
-  uint_t pos = vga_get_cursor();
+  u32 pos = vga_get_cursor();
   struct coord_t coord;
 
   coord.x = pos % 80;
@@ -39,7 +39,7 @@ struct coord_t vga_get_cursor_coord() {
 // TODO: Print format (numbers).
 // TODO: Special chars.
 void vga_print_on_cursor(char* s) {
-  uint_t pos = vga_get_cursor();
+  u32 pos = vga_get_cursor();
 
   int offs = pos << 1;
   char* mem = (char*)VGA_MEM_ADDR;
@@ -72,21 +72,22 @@ void vga_printl_on_cursor(char* s) {
   vga_new_line();
 }
 
-void vga_print_hex(unsigned int n) {
+void vga_print_hex(u32 n) {
   char hexword[11];
   for (int i = 0; i < 11; i++) hexword[i] = 0;
 
   hexword[0] = '0';
   hexword[1] = 'x';
 
-  unsigned int len = 0;
+  u32 len = 0;
   for (; (n >> (len * 4)) > 0; len++)
     ;
 
-  unsigned int i = 2;
+  u32 i = 2;
   for (; n > 0; n >>= 4) {
     int hexdigit = n & 0xf;
-    hexword[3 + len - i] = hexdigit <= 9 ? '0' + hexdigit : 'a' + hexdigit;
+    hexword[3 + len - i] =
+        hexdigit <= 9 ? '0' + hexdigit : 'a' + (hexdigit - 10);
     i++;
   }
 
@@ -100,9 +101,9 @@ void vga_new_line() {
   vga_set_cursor(coord.y + 1, 0);
 }
 
-void vga_set_cursor_to_offs(uint_t offs) {
-  byte_t pos_lo = offs & 0xff;
-  byte_t pos_hi = (offs >> 8) & 0xff;
+void vga_set_cursor_to_offs(u32 offs) {
+  u8 pos_lo = offs & 0xff;
+  u8 pos_hi = (offs >> 8) & 0xff;
 
   io_byte_out(VGA_CTRL, CURSOR_POS_HI);
   io_byte_out(VGA_DATA, pos_hi);
@@ -110,8 +111,8 @@ void vga_set_cursor_to_offs(uint_t offs) {
   io_byte_out(VGA_DATA, pos_lo);
 }
 
-void vga_set_cursor(uint_t y, uint_t x) {
-  uint_t offs = y * MODE_7_WIDTH + x;
+void vga_set_cursor(u32 y, u32 x) {
+  u32 offs = y * MODE_7_WIDTH + x;
   vga_set_cursor_to_offs(offs);
 }
 
@@ -119,14 +120,25 @@ void vga_clear_screen() {
   int total = MODE_7_HEIGHT * MODE_7_WIDTH;
   char* mem = (char*)VGA_MEM_ADDR;
 
-  mem_set(VGA_MEM_ADDR, total * 2, 0);
-  // TODO: Fix missing cursor.
+  for (u32 i = 0; i < total; i++) {
+    mem[i * 2] = 0;
+    mem[i * 2 + 1] = TEXT_BLACK_ON_WHITE;
+  }
 
   vga_set_cursor(0, 0);
 }
 
 void vga_scroll() {
-  for (int i = 1; i < MODE_7_HEIGHT; i++) {
-    mem_copy(VGA_MEM_ADDR + i * 160, VGA_MEM_ADDR + (i - 1) * 160, 160);
+  char* mem = (char*)VGA_MEM_ADDR;
+  for (u32 y = 1; y < MODE_7_HEIGHT; y++) {
+    for (u32 x = 0; x < MODE_7_WIDTH * 2; x++) {
+      mem[(y - 1) * (MODE_7_WIDTH * 2) + x] = mem[y * (MODE_7_WIDTH * 2) + x];
+    }
+  }
+
+  for (u32 x = 0; x < MODE_7_WIDTH; x++) {
+    mem[(MODE_7_HEIGHT - 1) * (MODE_7_WIDTH * 2) + (x * 2)] = 0;
+    mem[(MODE_7_HEIGHT - 1) * (MODE_7_WIDTH * 2) + (x * 2) + 1] =
+        TEXT_BLACK_ON_WHITE;
   }
 }

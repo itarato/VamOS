@@ -3,10 +3,10 @@
 
 #include "types.h"
 
-byte_t io_byte_in(word_t port);
-void io_byte_out(word_t port, byte_t data);
+u8 io_byte_in(u16 port);
+void io_byte_out(u16 port, u8 data);
 
-word_t io_word_in(word_t port);
-void io_word_out(word_t port, word_t data);
+u16 io_word_in(u16 port);
+void io_word_out(u16 port, u16 data);
 
 #endif

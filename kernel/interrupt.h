@@ -57,25 +57,25 @@ extern void irq14();
 extern void irq15();
 
 typedef struct {
-  uint_t ds;
+  u32 ds;
 
-  uint_t edi;
-  uint_t esi;
-  uint_t ebp;
-  uint_t esp;
-  uint_t ebx;
-  uint_t edx;
-  uint_t ecx;
-  uint_t eax;
+  u32 edi;
+  u32 esi;
+  u32 ebp;
+  u32 esp;
+  u32 ebx;
+  u32 edx;
+  u32 ecx;
+  u32 eax;
 
-  uint_t idx;
-  uint_t err_no;
+  u32 idx;
+  u32 err_no;
 
-  uint_t eip;
-  uint_t cs;
-  uint_t eflags;
-  uint_t usersp;
-  uint_t ss;
+  u32 eip;
+  u32 cs;
+  u32 eflags;
+  u32 usersp;
+  u32 ss;
 } isr_call_stack_t;  // TODO Rename this type.
 
 void enable_interrupts();
@@ -83,25 +83,25 @@ void global_isr_handler(isr_call_stack_t regs);
 void global_irq_handler(isr_call_stack_t regs);
 
 typedef struct {
-  word_t offset_lo;
-  word_t segment_selector;
-  byte_t reserved;
-  byte_t flags;
-  word_t offset_hi;
+  u16 offset_lo;
+  u16 segment_selector;
+  u8 reserved;
+  u8 flags;
+  u16 offset_hi;
 } __attribute__((packed)) idt_gate_t;
 
 typedef struct {
-  word_t limit;
-  uint_t base;
+  u16 limit;
+  u32 base;
 } __attribute__((packed)) idt_register_t;
 
 idt_gate_t idt[IDT_COUNT];
 idt_register_t idt_register;
 
-void set_idt_gate(unsigned int idx, uint_t handler);
+void set_idt_gate(u32 idx, u32 handler);
 void set_idt_register();
 
 typedef void (*irq_callback_t)(isr_call_stack_t);
-void register_irq_handler(unsigned int irq_no, irq_callback_t handler);
+void register_irq_handler(u32 irq_no, irq_callback_t handler);
 
 #endif  // INTERRUPT_H

@@ -1,18 +1,18 @@
 #include "mem.h"
 
-void mem_copy(uint_t src, uint_t dest, uint_t size) {
+void mem_copy(u32 src, u32 dest, u32 size) {
   char* p_src = (char*)src;
   char* p_dest = (char*)dest;
 
-  for (uint_t i = 0; i < size; i++) {
+  for (u32 i = 0; i < size; i++) {
     p_dest[i] = p_src[i];
   }
 }
 
-void mem_set(uint_t src, uint_t size, unsigned char data) {
+void mem_set(u32 src, u32 size, unsigned char data) {
   char* p_src = (char*)src;
 
-  for (uint_t i = 0; i < size; i++) {
+  for (u32 i = 0; i < size; i++) {
     p_src[i] = data;
   }
 }
