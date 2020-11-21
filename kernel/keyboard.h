@@ -4,6 +4,6 @@
 #include "interrupt.h"
 
 void keyboard_init();
-static void keyboard_callback(isr_call_stack_t regs);
+static void keyboard_callback(int_regs_t regs);
 
 #endif

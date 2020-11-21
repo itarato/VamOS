@@ -7,6 +7,7 @@
 
 #define KEYBOARD_DATA_PORT 0x60
 
+// https://wiki.osdev.org/PS2_Keyboard
 char* keymap[] = {
     "<\\0>",       "<escape>", "1", "2", "3",  "4",        "5",
     "6",           "7",        "8", "9", "0",  "-",        "=",
@@ -21,7 +22,7 @@ char* keymap[] = {
 
 void keyboard_init() { register_irq_handler(1, keyboard_callback); }
 
-static void keyboard_callback(isr_call_stack_t regs) {
+static void keyboard_callback(int_regs_t regs) {
   // vga_printl_on_cursor("key");
   u8 scancode = io_byte_in(KEYBOARD_DATA_PORT);
 

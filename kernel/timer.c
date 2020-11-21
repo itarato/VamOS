@@ -23,6 +23,6 @@ void timer_init(u32 freq) {
   register_irq_handler(0, timer_callback);
 }
 
-static void timer_callback(isr_call_stack_t regs) {
+static void timer_callback(int_regs_t regs) {
   // vga_printl_on_cursor("tick");
 }

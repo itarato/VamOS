@@ -133,29 +133,33 @@ void enable_interrupts() {
   set_idt_register();
 }
 
-void global_isr_handler(isr_call_stack_t regs) {
+void global_isr_handler(int_regs_t regs) {
   vga_print_on_cursor("Interrupt (ISR) called:\n\tID:");
   vga_print_hex(regs.idx);
   vga_print_on_cursor("\n\tERR:");
-  vga_print_hex(regs.err_no);
+  vga_print_hex(regs.extra_code);
   vga_print_on_cursor("\n\t");
   vga_printl_on_cursor(interrupt_names[regs.idx]);
 }
 
-void global_irq_handler(isr_call_stack_t regs) {
-  if (irq_handlers[regs.err_no] > 0) {
-    irq_handlers[regs.err_no](regs);
+void irq_ack(u8 isr_no) {
+  if (isr_no >= 40) io_byte_out(PIC_SLAVE_CMD, PIC_ACK);
+  io_byte_out(PIC_MASTER_CMD, PIC_ACK);
+}
+
+void global_irq_handler(int_regs_t regs) {
+  if (irq_handlers[regs.extra_code] > 0) {
+    irq_handlers[regs.extra_code](regs);
   } else {
     vga_print_on_cursor("Interrupt (IRQ) called:\n\tID:");
     vga_print_hex(regs.idx);
     vga_print_on_cursor("\n\tIRQ:");
-    vga_print_hex(regs.err_no);
+    vga_print_hex(regs.extra_code);
     vga_print_on_cursor("\n\t");
     vga_printl_on_cursor(interrupt_names[regs.idx]);
   }
 
-  if (regs.idx >= 40) io_byte_out(PIC_SLAVE_CMD, PIC_ACK);
-  io_byte_out(PIC_MASTER_CMD, PIC_ACK);
+  irq_ack(regs.idx);
 }
 
 void set_idt_gate(u32 idx, u32 handler) {
@@ -169,6 +173,7 @@ void set_idt_gate(u32 idx, u32 handler) {
 void set_idt_register() {
   idt_register.base = (u32)&idt;
   idt_register.limit = IDT_COUNT * sizeof(idt_gate_t) - 1;
+
   __asm__ __volatile__("lidtl (%0)" : : "r"(&idt_register));
 }
 
