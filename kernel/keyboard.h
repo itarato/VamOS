@@ -4,6 +4,8 @@
 #include "interrupt.h"
 
 void keyboard_init();
-static void keyboard_callback(int_regs_t regs);
+
+typedef void (*keyboard_listener_t)(u8);
+void keyboard_subscribe(keyboard_listener_t listener);
 
 #endif

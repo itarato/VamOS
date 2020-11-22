@@ -148,7 +148,7 @@ void irq_ack(u8 isr_no) {
 }
 
 void global_irq_handler(int_regs_t regs) {
-  if (irq_handlers[regs.extra_code] > 0) {
+  if (irq_handlers[regs.extra_code] != NULL) {
     irq_handlers[regs.extra_code](regs);
   } else {
     vga_print_on_cursor("Interrupt (IRQ) called:\n\tID:");

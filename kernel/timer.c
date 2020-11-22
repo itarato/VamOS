@@ -11,6 +11,10 @@
 #define TIMER_PORT_CH2 0x42
 #define TIMER_MODE_CMD 0x43
 
+static void timer_callback(int_regs_t regs) {
+  // vga_printl_on_cursor("tick");
+}
+
 void timer_init(u32 freq) {
   u32 div = MAIN_FREQ / freq;
   u8 lo = (u8)(div & 0xff);
@@ -21,8 +25,4 @@ void timer_init(u32 freq) {
   io_byte_out(TIMER_PORT_CH0, hi);
 
   register_irq_handler(0, timer_callback);
-}
-
-static void timer_callback(int_regs_t regs) {
-  // vga_printl_on_cursor("tick");
 }
