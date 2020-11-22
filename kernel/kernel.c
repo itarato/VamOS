@@ -1,5 +1,6 @@
 #include "interrupt.h"
 #include "keyboard.h"
+#include "shell.h"
 #include "timer.h"
 #include "vga.h"
 
@@ -10,6 +11,7 @@ void main() {
 
   timer_init(10);
   keyboard_init();
+  shell_init();
 
   vga_clear_screen();
   vga_printl_on_cursor("Kernel:\n\tVGA text mode initialized!");
