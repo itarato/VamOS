@@ -12,6 +12,7 @@
 #define TEXT_BLACK_ON_WHITE 0xf
 
 #define MODE_7_WIDTH 80
+#define MODE_7_WIDTH_REAL 160
 #define MODE_7_HEIGHT 25
 #define MODE_7_TEXT_OFFS_LIM 2000
 
@@ -30,8 +31,8 @@ struct coord_t vga_get_cursor_coord() {
   u32 pos = vga_get_cursor();
   struct coord_t coord;
 
-  coord.x = pos % 80;
-  coord.y = pos / 80;
+  coord.x = pos % MODE_7_WIDTH;
+  coord.y = pos / MODE_7_WIDTH;
 
   return coord;
 }
@@ -46,12 +47,12 @@ void vga_print_on_cursor(char* s) {
 
   for (char* p_ch = s; *p_ch != 0; p_ch++) {
     if (offs >= MODE_7_TEXT_OFFS_LIM * 2) {
-      offs -= 160;
+      offs -= MODE_7_WIDTH_REAL;
       vga_scroll();
     }
 
     if (*p_ch == '\n') {
-      offs += 160 - (offs % 160);
+      offs += MODE_7_WIDTH_REAL - (offs % MODE_7_WIDTH_REAL);
       continue;
     } else if (*p_ch == '\t') {
       offs += 16 - (offs % 16);
