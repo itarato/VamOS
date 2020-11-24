@@ -90,16 +90,16 @@ u8 scancode_ascii_map[256] = {
 };
 
 static void keyboard_callback(int_regs_t regs) {
-  // vga_printl_on_cursor("key");
+  // printl("key");
   u8 scancode = io_byte_in(KEYBOARD_DATA_PORT);
 
   u8 keymap_len = sizeof(keymap) / sizeof(char*);
   if (scancode >= keymap_len) {
     // vga_print_hex((u32)scancode);
     // vga_new_line();
-    // vga_printl_on_cursor("?");
+    // printl("?");
   } else {
-    // vga_print_on_cursor(keymap[scancode]);
+    // print(keymap[scancode]);
 
     for (u8 i = 0; i < LISTENERS_SIZE && listeners[i] != NULL; i++) {
       listeners[i](scancode_ascii_map[scancode]);

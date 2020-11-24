@@ -134,12 +134,12 @@ void enable_interrupts() {
 }
 
 void global_isr_handler(int_regs_t regs) {
-  vga_print_on_cursor("Interrupt (ISR) called:\n\tID:");
+  print("Interrupt (ISR) called:\n\tID:");
   vga_print_hex(regs.idx);
-  vga_print_on_cursor("\n\tERR:");
+  print("\n\tERR:");
   vga_print_hex(regs.extra_code);
-  vga_print_on_cursor("\n\t");
-  vga_printl_on_cursor(interrupt_names[regs.idx]);
+  print("\n\t");
+  printl(interrupt_names[regs.idx]);
 }
 
 void irq_ack(u8 isr_no) {
@@ -151,12 +151,12 @@ void global_irq_handler(int_regs_t regs) {
   if (irq_handlers[regs.extra_code] != NULL) {
     irq_handlers[regs.extra_code](regs);
   } else {
-    vga_print_on_cursor("Interrupt (IRQ) called:\n\tID:");
+    print("Interrupt (IRQ) called:\n\tID:");
     vga_print_hex(regs.idx);
-    vga_print_on_cursor("\n\tIRQ:");
+    print("\n\tIRQ:");
     vga_print_hex(regs.extra_code);
-    vga_print_on_cursor("\n\t");
-    vga_printl_on_cursor(interrupt_names[regs.idx]);
+    print("\n\t");
+    printl(interrupt_names[regs.idx]);
   }
 
   irq_ack(regs.idx);

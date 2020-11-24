@@ -12,7 +12,7 @@
 #define TIMER_MODE_CMD 0x43
 
 static void timer_callback(int_regs_t regs) {
-  // vga_printl_on_cursor("tick");
+  // printl("tick");
 }
 
 void timer_init(u32 freq) {

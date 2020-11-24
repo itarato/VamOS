@@ -39,7 +39,7 @@ struct coord_t vga_get_cursor_coord() {
 
 // TODO: Print format (numbers).
 // TODO: Special chars.
-void vga_print_on_cursor(char* s) {
+void print(char* s) {
   u32 pos = vga_get_cursor();
 
   int offs = pos << 1;
@@ -68,8 +68,8 @@ void vga_print_on_cursor(char* s) {
   vga_set_cursor_to_offs(offs >> 1);
 }
 
-void vga_printl_on_cursor(char* s) {
-  vga_print_on_cursor(s);
+void printl(char* s) {
+  print(s);
   vga_new_line();
 }
 
@@ -94,7 +94,7 @@ void vga_print_hex(u32 n) {
 
   if (i == 2) hexword[2] = '0';
 
-  vga_print_on_cursor(hexword);
+  print(hexword);
 }
 
 void vga_new_line() {

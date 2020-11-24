@@ -3,7 +3,9 @@
 
 #include "types.h"
 
-// static u8 char_buf[256];
+// TODO: This might not be the best place for this - more like an IO but maybe
+// not the IO we have currently.
+static u8 char_buf[256];
 
 void shell_init();
 
