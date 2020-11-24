@@ -2,6 +2,7 @@
 
 #include "interrupt.h"
 #include "io.h"
+#include "util.h"
 #include "vga.h"
 
 #define MAIN_FREQ 1193180
@@ -12,6 +13,7 @@
 #define TIMER_MODE_CMD 0x43
 
 static void timer_callback(int_regs_t regs) {
+  IGNORE(regs);
   // printl("tick");
 }
 

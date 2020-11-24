@@ -4,6 +4,8 @@
 #include "timer.h"
 #include "vga.h"
 
+void exit() { asm volatile("hlt"); }
+
 void main() {
   enable_interrupts();
 

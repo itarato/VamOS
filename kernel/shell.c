@@ -6,6 +6,8 @@
 #include "util.h"
 #include "vga.h"
 
+static char char_buf[CHAR_BUF_SIZE];
+
 void io_buf_push(char ch) {
   u16 i;
   for (; char_buf[i] != 0; i++)

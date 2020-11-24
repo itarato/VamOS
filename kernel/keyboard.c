@@ -90,6 +90,8 @@ u8 scancode_ascii_map[256] = {
 };
 
 static void keyboard_callback(int_regs_t regs) {
+  IGNORE(regs);
+
   // printl("key");
   u8 scancode = io_byte_in(KEYBOARD_DATA_PORT);
 

@@ -97,7 +97,7 @@ void vga_set_cursor(u32 y, u32 x) {
 }
 
 void vga_clear_screen() {
-  int total = MODE_7_HEIGHT * MODE_7_WIDTH;
+  u32 total = MODE_7_HEIGHT * MODE_7_WIDTH;
   char* mem = (char*)VGA_MEM_ADDR;
 
   for (u32 i = 0; i < total; i++) {

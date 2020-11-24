@@ -4,7 +4,7 @@ OBJ = ${C_SOURCES:.c=.o kernel/interrupt_table.o}
 CC = /home/itarato/code/os/i386elfgcc/bin/i386-elf-gcc
 # GDB = /home/itarato/code/os/i386elfgcc/bin/i386-elf-gdb
 GDB = /usr/bin/gdb
-CFLAGS = -g -Wall -pedantic
+CFLAGS = -g -Wall -Wextra -pedantic -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -m32
 QEMU = qemu-system-i386
 
 os-image.bin: boot/boot.bin kernel.bin
