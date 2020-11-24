@@ -17,4 +17,3 @@ void vga_clear_screen();
 void vga_set_cursor(u32 y, u32 x);
 void vga_set_cursor_to_offs(u32 offs);
 void vga_scroll();
-void vga_print_hex(u32 n);

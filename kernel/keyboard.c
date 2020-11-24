@@ -95,7 +95,8 @@ static void keyboard_callback(int_regs_t regs) {
 
   u8 keymap_len = sizeof(keymap) / sizeof(char*);
   if (scancode >= keymap_len) {
-    // vga_print_hex((u32)scancode);
+    // char hexbuf[8];
+    // print(int_to_hex_string((u32)scancode, hexbuf, 8));
     // vga_new_line();
     // printl("?");
   } else {

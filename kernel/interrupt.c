@@ -1,6 +1,7 @@
 #include "interrupt.h"
 
 #include "io.h"
+#include "strings.h"
 #include "vga.h"
 
 #define PIC_MASTER_CMD 0x20
@@ -134,10 +135,12 @@ void enable_interrupts() {
 }
 
 void global_isr_handler(int_regs_t regs) {
+  char hexbuf[8];
+
   print("Interrupt (ISR) called:\n\tID:");
-  vga_print_hex(regs.idx);
+  print(int_to_hex_string(regs.idx, hexbuf, 8));
   print("\n\tERR:");
-  vga_print_hex(regs.extra_code);
+  print(int_to_hex_string(regs.extra_code, hexbuf, 8));
   print("\n\t");
   printl(interrupt_names[regs.idx]);
 }
@@ -151,10 +154,12 @@ void global_irq_handler(int_regs_t regs) {
   if (irq_handlers[regs.extra_code] != NULL) {
     irq_handlers[regs.extra_code](regs);
   } else {
+    char hexbuf[8];
+
     print("Interrupt (IRQ) called:\n\tID:");
-    vga_print_hex(regs.idx);
+    print(int_to_hex_string(regs.idx, hexbuf, 8));
     print("\n\tIRQ:");
-    vga_print_hex(regs.extra_code);
+    print(int_to_hex_string(regs.extra_code, hexbuf, 8));
     print("\n\t");
     printl(interrupt_names[regs.idx]);
   }
