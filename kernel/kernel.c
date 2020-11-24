@@ -11,7 +11,6 @@ void main() {
 
   timer_init(10);
   keyboard_init();
-  shell_init();
 
   vga_clear_screen();
   printl("Kernel:\n\tVGA text mode initialized!");
@@ -21,4 +20,6 @@ void main() {
   // Base CPU interrupts expect an error code - without it SP cannot point to
   // the return addr.
   // __asm__ __volatile__("int $11");
+
+  shell_init();
 }

@@ -1,3 +1,6 @@
+// TODO: Print format (numbers).
+// TODO: Special chars.
+
 #include "vga.h"
 
 #include "io.h"
@@ -37,35 +40,35 @@ struct coord_t vga_get_cursor_coord() {
   return coord;
 }
 
-// TODO: Print format (numbers).
-// TODO: Special chars.
-void print(char* s) {
+void printc(char c) {
   u32 pos = vga_get_cursor();
 
   int offs = pos << 1;
   char* mem = (char*)VGA_MEM_ADDR;
 
-  for (char* p_ch = s; *p_ch != 0; p_ch++) {
-    if (offs >= MODE_7_TEXT_OFFS_LIM * 2) {
-      offs -= MODE_7_WIDTH_REAL;
-      vga_scroll();
-    }
+  if (offs >= MODE_7_TEXT_OFFS_LIM * 2) {
+    offs -= MODE_7_WIDTH_REAL;
+    vga_scroll();
+  }
 
-    if (*p_ch == '\n') {
-      offs += MODE_7_WIDTH_REAL - (offs % MODE_7_WIDTH_REAL);
-      continue;
-    } else if (*p_ch == '\t') {
-      offs += 16 - (offs % 16);
-      continue;
-    }
-
-    mem[offs] = *p_ch;
+  if (c == '\n') {
+    offs += MODE_7_WIDTH_REAL - (offs % MODE_7_WIDTH_REAL);
+  } else if (c == '\t') {
+    offs += 16 - (offs % 16);
+  } else {
+    mem[offs] = c;
     mem[offs + 1] = TEXT_BLACK_ON_WHITE;
 
     offs += 2;
   }
 
   vga_set_cursor_to_offs(offs >> 1);
+}
+
+void print(char* s) {
+  for (char* p_ch = s; *p_ch != 0; p_ch++) {
+    printc(*p_ch);
+  }
 }
 
 void printl(char* s) {

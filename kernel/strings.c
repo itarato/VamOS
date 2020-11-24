@@ -28,5 +28,16 @@ char* int_to_hex_string(u32 n, char* buf, u8 buflen) {
 }
 
 bool is_regular_char(char c) {
-  return (c >= 97 && c <= 122) || (c >= 48 && c <= 57);
+  return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == ' ';
+}
+
+bool is_newline_char(char c) { return c == '\n'; }
+
+bool str_eq(char* lhs, char* rhs) {
+  while (*lhs != 0 && *lhs == *rhs) {
+    lhs++;
+    rhs++;
+  }
+
+  return *lhs == 0 && *rhs == 0;
 }
