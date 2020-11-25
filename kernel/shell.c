@@ -25,10 +25,15 @@ void io_buf_clear() {
 void shell_exec_buffer() {
   char* cmd = char_buf;
 
+  vga_new_line();
+
   if (str_eq(cmd, "help")) {
-    printl("\n VamOS Shell V0.0");
+    printl("VamOS Shell V0.0");
+  } else if (str_eq(cmd, "exit")) {
+    printl("Bye");
+    halt();
   } else {
-    printl("\n Unknown command");
+    printl("gUnknown command");
   }
 
   io_buf_clear();

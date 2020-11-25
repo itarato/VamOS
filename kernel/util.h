@@ -4,5 +4,6 @@
 #define IGNORE(x) (void)(x)
 
 void panic(char *msg);
+void halt();
 
 #endif
