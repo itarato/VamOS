@@ -18,6 +18,15 @@ void io_buf_push(char ch) {
   char_buf[i] = ch;
 }
 
+void io_buf_pop() {
+  u16 i;
+  for (; char_buf[i] != 0; i++)
+    ;
+
+  if (i == 0) return;
+  char_buf[i - 1] = 0;
+}
+
 void io_buf_clear() {
   for (u8 i = 0; i < CHAR_BUF_SIZE; i++) char_buf[i] = 0;
 }
@@ -33,7 +42,7 @@ void shell_exec_buffer() {
     printl("Bye");
     halt();
   } else {
-    printl("gUnknown command");
+    printl("Unknown command");
   }
 
   io_buf_clear();
@@ -47,6 +56,9 @@ static void shell_keyboard_subscriber(u8 ch) {
     shell_exec_buffer();
 
     print("\n#> ");
+  } else if (is_backspace_char(ch)) {
+    io_buf_pop();
+    printc(ch);
   }
 }
 

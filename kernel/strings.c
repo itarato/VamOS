@@ -33,6 +33,10 @@ bool is_regular_char(char c) {
 
 bool is_newline_char(char c) { return c == '\n'; }
 
+bool is_tab_char(char c) { return c == '\t'; }
+
+bool is_backspace_char(char c) { return (u8)c == 8; }
+
 bool str_eq(char* lhs, char* rhs) {
   while (*lhs != 0 && *lhs == *rhs) {
     lhs++;

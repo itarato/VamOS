@@ -5,6 +5,7 @@
 
 #include "io.h"
 #include "mem.h"
+#include "strings.h"
 
 #define VGA_MEM_ADDR 0xb8000
 #define VGA_CTRL 0x3d4
@@ -51,10 +52,17 @@ void printc(char c) {
     vga_scroll();
   }
 
-  if (c == '\n') {
+  if (is_newline_char(c)) {
     offs += MODE_7_WIDTH_REAL - (offs % MODE_7_WIDTH_REAL);
-  } else if (c == '\t') {
+  } else if (is_tab_char(c)) {
     offs += 16 - (offs % 16);
+  } else if (is_backspace_char(c)) {
+    if (offs >= 2) {
+      mem[offs - 2] = 0;
+      mem[offs - 1] = TEXT_BLACK_ON_WHITE;
+
+      offs -= 2;
+    }
   } else {
     mem[offs] = c;
     mem[offs + 1] = TEXT_BLACK_ON_WHITE;
