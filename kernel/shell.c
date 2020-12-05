@@ -9,7 +9,7 @@
 static char char_buf[CHAR_BUF_SIZE];
 
 void io_buf_push(char ch) {
-  u16 i;
+  u16 i = 0;
   for (; char_buf[i] != 0; i++)
     ;
 
@@ -19,8 +19,8 @@ void io_buf_push(char ch) {
 }
 
 void io_buf_pop() {
-  u16 i;
-  for (; char_buf[i] != 0; i++)
+  u16 i = 0;
+  for (; *(char_buf + i) != 0; i++)
     ;
 
   if (i == 0) return;
@@ -32,13 +32,11 @@ void io_buf_clear() {
 }
 
 void shell_exec_buffer() {
-  char* cmd = char_buf;
-
   vga_new_line();
 
-  if (str_eq(cmd, "help")) {
+  if (str_eq(char_buf, "help")) {
     printl("VamOS Shell V0.0");
-  } else if (str_eq(cmd, "exit")) {
+  } else if (str_eq(char_buf, "exit")) {
     printl("Bye");
     halt();
   } else {

@@ -9,7 +9,7 @@
 #define KEYBOARD_DATA_PORT 0x60
 
 #define LISTENERS_SIZE 4
-static keyboard_listener_t listeners[LISTENERS_SIZE];
+keyboard_listener_t listeners[LISTENERS_SIZE];
 
 // https://wiki.osdev.org/PS2_Keyboard
 char* keymap[] = {

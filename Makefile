@@ -24,7 +24,7 @@ run: os-image.bin
 
 debug: os-image.bin kernel.elf
 	${QEMU} -s -S -drive format=raw,media=disk,file=$<,index=0,if=floppy &
-	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf" -ex "tui enable" -ex "layout split"
+	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf" -ex "tui enable" -ex "layout split" -ex "focus cmd"
 
 %.o: %.c ${C_HEADERS}
 	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
