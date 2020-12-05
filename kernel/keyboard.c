@@ -9,10 +9,10 @@
 #define KEYBOARD_DATA_PORT 0x60
 
 #define LISTENERS_SIZE 4
-keyboard_listener_t listeners[LISTENERS_SIZE];
+static keyboard_listener_t listeners[LISTENERS_SIZE];
 
 // https://wiki.osdev.org/PS2_Keyboard
-char* keymap[] = {
+static char* keymap[] = {
     "<\\0>",       "<escape>", "1", "2", "3", "4",        "5",
     "6",           "7",        "8", "9", "0", "-",        "=",
     "<backspace>", "<tab>",    "q", "w", "e", "r",        "t",
@@ -24,7 +24,7 @@ char* keymap[] = {
     "<lalt>",      "<space>",
 };
 
-u8 scancode_ascii_map[256] = {
+static u8 scancode_ascii_map[256] = {
     0,   27, /* ESC */
     49,      /* 1 */
     50,      /* 2 */
