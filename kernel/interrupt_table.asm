@@ -25,7 +25,6 @@ isr_generic_interrupt_wrapper:
 
     popa
     add esp, 0x8
-    sti
     iret
 
 irq_generic_interrupt_wrapper:
@@ -49,7 +48,6 @@ irq_generic_interrupt_wrapper:
 
     popa
     add esp, 8
-    sti
     iret
 
 global isr0
