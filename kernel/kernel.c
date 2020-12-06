@@ -4,10 +4,10 @@
 #include "timer.h"
 #include "vga.h"
 
-void main() {
+void kernel_main() {
   enable_interrupts();
 
-  __asm__ volatile("sti");
+  asm volatile("sti");
 
   timer_init(10);
   keyboard_init();
@@ -16,10 +16,10 @@ void main() {
   printl("Kernel:\n\tVGA text mode initialized!");
   printl("\tTesting interrupts...");
 
-  __asm__ __volatile__("int $4");
+  asm volatile("int $4");
   // Base CPU interrupts expect an error code - without it SP cannot point to
   // the return addr.
-  // __asm__ __volatile__("int $11");
+  // asm volatile("int $11");
 
   shell_init();
 }

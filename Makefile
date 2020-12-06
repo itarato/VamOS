@@ -4,7 +4,7 @@ OBJ = ${C_SOURCES:.c=.o kernel/interrupt_table.o}
 CC = /home/itarato/code/os/i386elfgcc/bin/i386-elf-gcc
 # GDB = /home/itarato/code/os/i386elfgcc/bin/i386-elf-gdb
 GDB = /usr/bin/gdb
-CFLAGS = -g -Wall -Wextra -pedantic -nostdlib -nostdinc -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -m32
+CFLAGS = -g -Wall -Wextra -ffreestanding -fno-exceptions -pedantic -fno-builtin -fno-stack-protector -nostartfiles -nodefaultlibs -m32
 QEMU = qemu-system-i386
 
 os-image.bin: boot/boot.bin kernel.bin
@@ -27,7 +27,7 @@ debug: os-image.bin kernel.elf
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf" -ex "tui enable" -ex "layout split" -ex "focus cmd"
 
 %.o: %.c ${C_HEADERS}
-	${CC} ${CFLAGS} -ffreestanding -c $< -o $@
+	${CC} ${CFLAGS} -c $< -o $@
 
 %.o: %.asm
 	nasm $< -f elf -o $@

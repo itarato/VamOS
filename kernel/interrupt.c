@@ -179,7 +179,7 @@ void set_idt_register() {
   idt_register.base = (u32)&idt;
   idt_register.limit = IDT_COUNT * sizeof(idt_gate_t) - 1;
 
-  __asm__ __volatile__("lidtl (%0)" : : "r"(&idt_register));
+  asm volatile("lidtl (%0)" : : "r"(&idt_register));
 }
 
 void register_irq_handler(u32 irq_no, irq_callback_t handler) {

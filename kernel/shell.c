@@ -1,6 +1,7 @@
 #include "shell.h"
 
 #include "keyboard.h"
+#include "mem.h"
 #include "strings.h"
 #include "types.h"
 #include "util.h"
@@ -16,6 +17,9 @@ void io_buf_push(char ch) {
   if (i >= CHAR_BUF_SIZE - 1) panic("Char buf overflow.");
 
   char_buf[i] = ch;
+
+  char* p_m = (char*)malloc(1);
+  *p_m = ch;
 }
 
 void io_buf_pop() {
