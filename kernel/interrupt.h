@@ -62,7 +62,7 @@ typedef struct {
   u32 edi;
   u32 esi;
   u32 ebp;
-  u32 esp;
+  u32 current_ctx_esp;
   u32 ebx;
   u32 edx;
   u32 ecx;
@@ -75,7 +75,7 @@ typedef struct {
   u32 eip;
   u32 cs;
   u32 eflags;
-  u32 usersp;
+  u32 esp;
   u32 ss;
 } int_regs_t;  // TODO Rename this type.
 
