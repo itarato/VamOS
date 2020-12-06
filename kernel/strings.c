@@ -45,3 +45,10 @@ bool str_eq(char* lhs, char* rhs) {
 
   return *lhs == 0 && *rhs == 0;
 }
+
+u32 strlen(char* s) {
+  u32 len = 0;
+  for (; *(s + len) != 0; len++)
+    ;
+  return len;
+}

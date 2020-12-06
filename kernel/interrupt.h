@@ -80,8 +80,8 @@ typedef struct {
 } int_regs_t;  // TODO Rename this type.
 
 void enable_interrupts();
-void global_isr_handler(int_regs_t regs);
-void global_irq_handler(int_regs_t regs);
+void global_isr_handler(int_regs_t* regs);
+void global_irq_handler(int_regs_t* regs);
 
 typedef struct {
   u16 offset_lo;
@@ -102,7 +102,7 @@ idt_register_t idt_register;
 void set_idt_gate(u32 idx, u32 handler);
 void set_idt_register();
 
-typedef void (*irq_callback_t)(int_regs_t);
+typedef void (*irq_callback_t)(int_regs_t*);
 void register_irq_handler(u32 irq_no, irq_callback_t handler);
 
 #endif  // INTERRUPT_H

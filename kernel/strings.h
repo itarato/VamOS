@@ -9,5 +9,6 @@ bool is_newline_char(char c);
 bool is_backspace_char(char c);
 bool is_tab_char(char c);
 bool str_eq(char* lhs, char* rhs);
+u32 strlen(char* s);
 
 #endif

@@ -12,7 +12,7 @@
 
 irq_callback_t irq_handlers[IDT_COUNT];
 
-char *interrupt_names[] = {
+char* interrupt_names[] = {
     // CPU exceptions (0..31).
     "Division By Zero",
     "Debug",
@@ -134,15 +134,15 @@ void enable_interrupts() {
   set_idt_register();
 }
 
-void global_isr_handler(int_regs_t regs) {
+void global_isr_handler(int_regs_t* regs) {
   char hexbuf[8];
 
   print("Interrupt (ISR) called:\n\tID:");
-  print(int_to_hex_string(regs.idx, hexbuf, 8));
+  print(int_to_hex_string(regs->idx, hexbuf, 8));
   print("\n\tERR:");
-  print(int_to_hex_string(regs.extra_code, hexbuf, 8));
+  print(int_to_hex_string(regs->extra_code, hexbuf, 8));
   print("\n\t");
-  printl(interrupt_names[regs.idx]);
+  printl(interrupt_names[regs->idx]);
 }
 
 void irq_ack(u8 isr_no) {
@@ -150,21 +150,21 @@ void irq_ack(u8 isr_no) {
   io_byte_out(PIC_MASTER_CMD, PIC_ACK);
 }
 
-void global_irq_handler(int_regs_t regs) {
-  if (irq_handlers[regs.extra_code] != NULL) {
-    irq_handlers[regs.extra_code](regs);
+void global_irq_handler(int_regs_t* regs) {
+  if (irq_handlers[regs->extra_code] != NULL) {
+    irq_handlers[regs->extra_code](regs);
   } else {
     char hexbuf[8];
 
     print("Interrupt (IRQ) called:\n\tID:");
-    print(int_to_hex_string(regs.idx, hexbuf, 8));
+    print(int_to_hex_string(regs->idx, hexbuf, 8));
     print("\n\tIRQ:");
-    print(int_to_hex_string(regs.extra_code, hexbuf, 8));
+    print(int_to_hex_string(regs->extra_code, hexbuf, 8));
     print("\n\t");
-    printl(interrupt_names[regs.idx]);
+    printl(interrupt_names[regs->idx]);
   }
 
-  irq_ack(regs.idx);
+  irq_ack(regs->idx);
 }
 
 void set_idt_gate(u32 idx, u32 handler) {

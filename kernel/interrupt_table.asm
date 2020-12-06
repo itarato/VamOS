@@ -15,8 +15,11 @@ isr_generic_interrupt_wrapper:
     mov fs, ax
     mov gs, ax
 
+    push esp
+    cld
     call global_isr_handler
 
+    pop eax
     pop eax
     mov ds, ax
     mov es, ax
@@ -38,8 +41,11 @@ irq_generic_interrupt_wrapper:
     mov fs, ax
     mov gs, ax
 
+    push esp
+    cld
     call global_irq_handler
 
+    pop ebx
     pop ebx
     mov ds, bx
     mov es, bx

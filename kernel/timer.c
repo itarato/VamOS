@@ -12,7 +12,7 @@
 #define TIMER_PORT_CH2 0x42
 #define TIMER_MODE_CMD 0x43
 
-static void timer_callback(int_regs_t regs) {
+static void timer_callback(int_regs_t* regs) {
   IGNORE(regs);
   // printl("tick");
 }
