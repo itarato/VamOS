@@ -171,6 +171,14 @@ void set_idt_gate(u32 idx, u32 handler) {
   idt[idx].offset_lo = (u16)(handler & 0xffff);
   idt[idx].segment_selector = KERNEL_SEGMENT;
   idt[idx].reserved = 0x0;
+  /*
+    0x8E : 0b1000_1110
+    Present (7) - 1
+    Descriptor privilege level (5-6) - 00
+    (4) - 0
+    Gate size (1: 32bit, 0: 16bit) (3) - 1
+    (2-0) - 111
+  */
   idt[idx].flags = 0x8E;
   idt[idx].offset_hi = (u16)((handler >> 16) & 0xffff);
 }
