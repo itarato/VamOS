@@ -1,5 +1,7 @@
 #include "mem.h"
 
+// https://wiki.osdev.org/Memory_Map_(x86)
+
 static u32 allocatable_mem_start = 0x10000;
 
 void mem_copy(u32 src, u32 dest, u32 size) {
@@ -26,3 +28,10 @@ void* malloc(u32 size) {
 
   return p;
 }
+
+// u16 get_available_low_memory() {
+//   u16 size;
+//   // asm("movw ($mem_size), %%ax" : "=a"(size));
+//   asm()
+//   return size;
+// }
