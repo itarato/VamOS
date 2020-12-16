@@ -1,11 +1,13 @@
 #include "interrupt.h"
 #include "keyboard.h"
+#include "mem.h"
 #include "shell.h"
 #include "strings.h"
 #include "timer.h"
 #include "vga.h"
 
-void kernel_main(u16 memsize) {
+void kernel_main() {
+  setup_mem_regions();
   enable_interrupts();
 
   asm volatile("sti");
@@ -16,10 +18,6 @@ void kernel_main(u16 memsize) {
   vga_clear_screen();
   printl("Kernel:\n\tVGA text mode initialized!");
   printl("\tTesting interrupts...");
-
-  char hexbuf[9];
-  int_to_hex_string(memsize, hexbuf, 9);
-  printl(hexbuf);
 
   asm volatile("int $4");
   // Base CPU interrupts expect an error code - without it SP cannot point to

@@ -84,6 +84,15 @@ void printl(char* s) {
   vga_new_line();
 }
 
+void printhex(char* name, u32 v) {
+  print(name);
+  print(": ");
+
+  char buf[9];
+  int_to_hex_string(v, buf, 9);
+  printl(buf);
+}
+
 void vga_new_line() {
   struct coord_t coord = vga_get_cursor_coord();
   vga_set_cursor(coord.y + 1, 0);
