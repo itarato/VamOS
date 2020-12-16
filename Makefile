@@ -1,4 +1,4 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
+C_SOURCES = $(wildcard kernel/*.c)
 C_HEADERS = $(wildcard kernel/*.h drivers/*.h)
 OBJ = ${C_SOURCES:.c=.o kernel/interrupt_table.o}
 CC = /home/itarato/code/os/i386elfgcc/bin/i386-elf-gcc
@@ -10,8 +10,8 @@ QEMU = qemu-system-i386
 os-image.bin: boot/boot.bin kernel.bin
 	cat $^ > $@
 
-kernel.bin: boot/kernel_entry.o ${OBJ}
-	i386-elf-ld -o $@ -Ttext 0x1000 $^ --oformat binary
+kernel.bin: kernel.elf
+	i386-elf-objcopy -O binary $^ $@
 
 kernel.elf: boot/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x1000 $^
