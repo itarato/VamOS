@@ -3,5 +3,5 @@ i386elfgcc
 *.bin
 *.dis
 *.elf
-
+*.img
 

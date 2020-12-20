@@ -20,10 +20,10 @@ kernel.dis: kernel.bin
 	ndisasm -b 32 $< > $@
 
 run: os-image.bin
-	${QEMU} -drive format=raw,media=disk,file=$<,index=0,if=floppy
+	${QEMU} -drive format=raw,media=disk,file=$<,index=0,if=floppy -hda maindrive.img
 
 debug: os-image.bin kernel.elf
-	${QEMU} -s -S -drive format=raw,media=disk,file=$<,index=0,if=floppy &
+	${QEMU} -s -S -drive format=raw,media=disk,file=$<,index=0,if=floppy -hda maindrive.img &
 	${GDB} -ex "target remote localhost:1234" -ex "symbol-file kernel.elf" -ex "tui enable" -ex "layout split" -ex "focus cmd"
 
 %.o: %.c ${C_HEADERS}
