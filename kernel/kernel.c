@@ -1,3 +1,4 @@
+#include "disk.h"
 #include "interrupt.h"
 #include "keyboard.h"
 #include "mem.h"
@@ -12,8 +13,9 @@ void kernel_main() {
 
   asm volatile("sti");
 
-  timer_init(10);
+  timer_init(400);
   keyboard_init();
+  disk_init();
 
   vga_clear_screen();
   printl("Kernel:\n\tVGA text mode initialized!");

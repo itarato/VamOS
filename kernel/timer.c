@@ -2,6 +2,7 @@
 
 #include "interrupt.h"
 #include "io.h"
+#include "types.h"
 #include "util.h"
 #include "vga.h"
 
@@ -12,9 +13,27 @@
 #define TIMER_PORT_CH2 0x42
 #define TIMER_MODE_CMD 0x43
 
+static u32 tick;
+
 static void timer_callback(int_regs_t* regs) {
   IGNORE(regs);
-  // printl("tick");
+  tick++;
+}
+
+u32 timer_tick_get() { return tick; }
+
+u32 timer_tick_diff(u32 start_tick) {
+  if (tick >= start_tick) {
+    return tick - start_tick;
+  } else {
+    return (u32)~start_tick + tick;
+  }
+}
+
+void timer_sleep(u32 ticks) {
+  u32 start = timer_tick_get();
+  while (timer_tick_diff(start) < ticks)
+    ;
 }
 
 void timer_init(u32 freq) {
