@@ -32,7 +32,7 @@ load_kernel:
     call print
 
     mov bx, KERNEL_OFFS
-    mov dh, 32
+    mov dh, 48
     mov dl, [boot_drive]
     call disk_load
 
