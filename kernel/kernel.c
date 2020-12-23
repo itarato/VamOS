@@ -28,4 +28,7 @@ void kernel_main() {
   // asm volatile("int $11");
 
   shell_init();
+
+  u8 buf[512];
+  disk_read(0, 0, 1, 0, buf);
 }

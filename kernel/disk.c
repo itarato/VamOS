@@ -385,10 +385,6 @@ u8 disk_ata_access(u8 direction, u8 drive, u32 lba, u8 num_sects, u16 selector,
   u8 cmd;
   switch (use_dma) {
     case 0:
-      // Not implemented;
-      panic("DMA not implemented");
-      break;
-    case 1:
       switch (direction) {
         case 0:
           switch (lba_mode) {
@@ -422,6 +418,11 @@ u8 disk_ata_access(u8 direction, u8 drive, u32 lba, u8 num_sects, u16 selector,
           panic("Unexpected direction");
           break;
       }
+      break;
+    case 1:
+      // Not implemented;
+      panic("DMA not implemented");
+      break;
   }
 
   ide_write(channel, ATA_REG_COMMAND, cmd);
