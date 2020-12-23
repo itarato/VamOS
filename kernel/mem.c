@@ -12,6 +12,13 @@ static mem_region_desc_t mem_region_desc;
 void setup_mem_regions() {
   mem_region_desc.len = *((u32*)MEM_REGION_ADDR);
   mem_region_desc.mem_regions = ((mem_region_info_t*)(MEM_REGION_ADDR + 4));
+
+  for (int i = 0; i < mem_region_desc.len; i++) {
+    printhex("Mem region", i);
+    printhex("  - start", mem_region_desc.mem_regions[i].addr_lo);
+    printhex("  - len", mem_region_desc.mem_regions[i].len_lo);
+    printhex("  - available", mem_region_desc.mem_regions[i].type);
+  }
 }
 
 void mem_copy(u32 src, u32 dest, u32 size) {

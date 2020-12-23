@@ -88,8 +88,8 @@ void printhex(char* name, u32 v) {
   print(name);
   print(": ");
 
-  char buf[9];
-  int_to_hex_string(v, buf, 9);
+  char buf[19];
+  int_to_hex_string(v, buf, 19);
   printl(buf);
 }
 

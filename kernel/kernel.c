@@ -8,6 +8,8 @@
 #include "vga.h"
 
 void kernel_main() {
+  vga_clear_screen();
+
   setup_mem_regions();
   enable_interrupts();
 
@@ -17,11 +19,10 @@ void kernel_main() {
   keyboard_init();
   disk_init();
 
-  vga_clear_screen();
   printl("Kernel:\n\tVGA text mode initialized!");
-  printl("\tTesting interrupts...");
 
-  asm volatile("int $4");
+  // printl("\tTesting interrupts...");
+  // asm volatile("int $4");
   // Base CPU interrupts expect an error code - without it SP cannot point to
   // the return addr.
   // asm volatile("int $11");

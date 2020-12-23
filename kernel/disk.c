@@ -317,13 +317,10 @@ void ide_initialize(u32 bar0, u32 bar1, u32 bar2, u32 bar3, u32 bar4) {
   }
 }
 
-void disk_init() {
-  ide_initialize(BAR0, BAR1, BAR2, BAR3, BAR4);
-  disk_read(0, 0, 0, 0, 0);
-}
+void disk_init() { ide_initialize(BAR0, BAR1, BAR2, BAR3, BAR4); }
 
-u8 disk_access(u8 direction, u8 drive, u32 lba, u8 num_sects, u16 selector,
-               u32 edi, u8 use_dma) {
+u8 disk_ata_access(u8 direction, u8 drive, u32 lba, u8 num_sects, u16 selector,
+                   u32 edi, u8 use_dma) {
   u8 channel = ide_devices[drive].channel;
 
   ide_irq_invoked = 0;
@@ -471,10 +468,42 @@ u8 disk_access(u8 direction, u8 drive, u32 lba, u8 num_sects, u16 selector,
   return 0;
 }
 
-u8 disk_write(u8 drive, u32 lba, u8 num_sects, u16 selector, u32 edi) {
-  return disk_access(1, drive, lba, num_sects, selector, edi, 0);
+void disk_write(u8 drive, u32 lba, u8 num_sects, u16 selector, u32 edi) {
+  if (drive > 3 || ide_devices[drive].reserved == 0) {
+    panic("Drive does not exist.");
+    return;
+  }
+
+  if (lba + num_sects > ide_devices[drive].size &&
+      ide_devices[drive].type == IDE_ATA) {
+    panic("Invalid position");
+    return;
+  }
+
+  if (ide_devices[drive].type == IDE_ATA) {
+    disk_ata_access(ATA_WRITE, drive, lba, num_sects, selector, edi, 0);
+  } else {
+    panic("Not supported drive type");
+    return;
+  }
 }
 
-u8 disk_read(u8 drive, u32 lba, u8 num_sects, u16 selector, u32 edi) {
-  return disk_access(0, drive, lba, num_sects, selector, edi, 0);
+void disk_read(u8 drive, u32 lba, u8 num_sects, u16 selector, u32 edi) {
+  if (drive > 3 || ide_devices[drive].reserved == 0) {
+    panic("Drive does not exist.");
+    return;
+  }
+
+  if (lba + num_sects > ide_devices[drive].size &&
+      ide_devices[drive].type == IDE_ATA) {
+    panic("Invalid position");
+    return;
+  }
+
+  if (ide_devices[drive].type == IDE_ATA) {
+    disk_ata_access(ATA_READ, drive, lba, num_sects, selector, edi, 0);
+  } else {
+    panic("Not supported drive type");
+    return;
+  }
 }

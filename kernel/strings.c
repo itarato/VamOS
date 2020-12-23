@@ -5,8 +5,8 @@
 
 char* int_to_hex_string(u32 n, char* buf, u8 buflen) {
   u32 len = 0;
-  for (; (n >> (len * 4)) > 0; len++)
-    ;
+  u32 _n = n;
+  for (; _n > 0; len++) _n /= 16;
 
   if (buflen <= len + 2) panic("Buffer too small");
 
