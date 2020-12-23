@@ -11,7 +11,8 @@ struct coord_t vga_get_cursor_coord();
 void print(char* s);
 void printc(char c);
 void printl(char* s);
-void printhex(char* name, u32 v);
+void printhex(u32 v);
+void printf(const char* tpl, ...);
 void vga_new_line();
 
 void vga_clear_screen();

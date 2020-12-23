@@ -6,9 +6,10 @@
 // https://wiki.osdev.org/Memory_Map_(x86)
 
 #define MEM_REGION_ADDR 0x8000
-#define MEM_REGION_TYPE_USABLE 0x2
+#define MEM_REGION_TYPE_USABLE 0x1
 
-static u32 allocatable_mem_start = 0x0;
+// The first "usable" region is from 0x0 - however
+static u32 allocatable_mem_start = 0x100000;
 static mem_region_desc_t mem_region_desc;
 
 void setup_mem_regions() {
@@ -16,10 +17,10 @@ void setup_mem_regions() {
   mem_region_desc.mem_regions = ((mem_region_info_t*)(MEM_REGION_ADDR + 4));
 
   for (int i = 0; i < mem_region_desc.len; i++) {
-    printhex("Mem region", i);
-    printhex("  - start", mem_region_desc.mem_regions[i].addr_lo);
-    printhex("  - len", mem_region_desc.mem_regions[i].len_lo);
-    // printhex("  - available", mem_region_desc.mem_regions[i].type);
+    printf("Mem region %x, start: %x len: %x type: %x\n", i,
+           mem_region_desc.mem_regions[i].addr_lo,
+           mem_region_desc.mem_regions[i].len_lo,
+           mem_region_desc.mem_regions[i].type);
   }
 }
 

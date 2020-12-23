@@ -3,6 +3,8 @@
 
 #include "vga.h"
 
+#include <stdarg.h>
+
 #include "io.h"
 #include "mem.h"
 #include "strings.h"
@@ -84,13 +86,31 @@ void printl(char* s) {
   vga_new_line();
 }
 
-void printhex(char* name, u32 v) {
-  print(name);
-  print(": ");
-
+void printhex(u32 v) {
   char buf[19];
   int_to_hex_string(v, buf, 19);
-  printl(buf);
+  print(buf);
+}
+
+void printf(const char* tpl, ...) {
+  va_list args;
+  va_start(args, tpl);
+
+  while (*tpl != '\0') {
+    if (*tpl == '%') {
+      tpl++;
+      switch (*tpl++) {
+        case 'x':
+          printhex(va_arg(args, unsigned int));
+          break;
+      }
+    } else {
+      printc(*tpl);
+      tpl++;
+    }
+  }
+
+  va_end(args);
 }
 
 void vga_new_line() {
