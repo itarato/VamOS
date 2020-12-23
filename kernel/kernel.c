@@ -21,6 +21,7 @@ void kernel_main() {
 
   printl("Kernel:\n\tVGA text mode initialized!");
 
+  // Interrupt example.
   // printl("\tTesting interrupts...");
   // asm volatile("int $4");
   // Base CPU interrupts expect an error code - without it SP cannot point to
@@ -29,6 +30,9 @@ void kernel_main() {
 
   shell_init();
 
-  u8 buf[512];
-  disk_read(0, 0, 1, 0, buf);
+  // Disk read write example.
+  // u8* buf = malloc(512);
+  // disk_read(0, 0, 1, 0, buf);
+  // for (int i = 0; i < 512; i++) buf[i] = 0xab;
+  // disk_write(0, 0, 1, 0, buf);
 }

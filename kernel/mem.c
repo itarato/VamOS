@@ -1,12 +1,14 @@
 #include "mem.h"
 
+#include "util.h"
 #include "vga.h"
 
 // https://wiki.osdev.org/Memory_Map_(x86)
 
 #define MEM_REGION_ADDR 0x8000
+#define MEM_REGION_TYPE_USABLE 0x2
 
-static u32 allocatable_mem_start = 0x10000;
+static u32 allocatable_mem_start = 0x0;
 static mem_region_desc_t mem_region_desc;
 
 void setup_mem_regions() {
@@ -17,7 +19,7 @@ void setup_mem_regions() {
     printhex("Mem region", i);
     printhex("  - start", mem_region_desc.mem_regions[i].addr_lo);
     printhex("  - len", mem_region_desc.mem_regions[i].len_lo);
-    printhex("  - available", mem_region_desc.mem_regions[i].type);
+    // printhex("  - available", mem_region_desc.mem_regions[i].type);
   }
 }
 
@@ -39,9 +41,30 @@ void mem_set(u32 src, u32 size, unsigned char data) {
 }
 
 void* malloc(u32 size) {
-  void* p = (void*)allocatable_mem_start;
+  u32 alloc_start = allocatable_mem_start;
 
-  allocatable_mem_start += size;
+  for (int i = 0; i < mem_region_desc.len; i++) {
+    if (mem_region_desc.mem_regions[i].type != MEM_REGION_TYPE_USABLE) continue;
 
-  return p;
+    if (mem_region_desc.mem_regions[i].addr_hi > 0 ||
+        mem_region_desc.mem_regions[i].len_hi > 0) {
+      panic(">32bit address space is not yet supported");
+      return NULL;
+    }
+
+    if (mem_region_desc.mem_regions[i].addr_lo > allocatable_mem_start) {
+      alloc_start = mem_region_desc.mem_regions[i].addr_lo;
+    }
+
+    if (mem_region_desc.mem_regions[i].addr_lo +
+            mem_region_desc.mem_regions[i].len_lo <
+        alloc_start + size) {
+      continue;
+    }
+
+    allocatable_mem_start = alloc_start + size;
+    return (void*)alloc_start;
+  }
+
+  return NULL;
 }
