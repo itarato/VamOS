@@ -34,6 +34,7 @@ void kernel_main() {
   // asm volatile("int $11");
 
   // Enable paging -> the very first PDE.
+  // https://wiki.osdev.org/Paging
   page_table_t* pt1 = malloc(0x1000, 0x1000);
   for (int i = 0; i < 1024; i++) {
     pt1->pte[i] = ((0x1000 * i) & ~0xFFF) | 0b000000010011;
@@ -42,7 +43,8 @@ void kernel_main() {
 
   asm volatile("mov %%eax, %%cr3" ::"a"(&pd));
   asm volatile("mov %cr0, %eax");
-  asm volatile("or $0x80000001, %eax");
+  // https://en.wikipedia.org/wiki/Control_register
+  asm volatile("or $0xC0000001, %eax");
   asm volatile("mov %eax, %cr0");
   printl("[kernel] paging enabled");
 
