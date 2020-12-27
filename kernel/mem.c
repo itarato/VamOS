@@ -41,8 +41,8 @@ void mem_set(u32 src, u32 size, unsigned char data) {
   }
 }
 
-void* malloc(u32 size) {
-  u32 alloc_start = allocatable_mem_start;
+void* malloc(u32 size, u32 align) {
+  u32 alloc_start = (allocatable_mem_start + align - 1) & ~(align - 1);
 
   for (int i = 0; i < mem_region_desc.len; i++) {
     if (mem_region_desc.mem_regions[i].type != MEM_REGION_TYPE_USABLE) continue;
@@ -54,7 +54,8 @@ void* malloc(u32 size) {
     }
 
     if (mem_region_desc.mem_regions[i].addr_lo > allocatable_mem_start) {
-      alloc_start = mem_region_desc.mem_regions[i].addr_lo;
+      alloc_start =
+          (mem_region_desc.mem_regions[i].addr_lo + align - 1) & ~(align - 1);
     }
 
     if (mem_region_desc.mem_regions[i].addr_lo +

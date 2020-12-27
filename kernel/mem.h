@@ -20,6 +20,7 @@ typedef struct {
 void setup_mem_regions();
 void mem_copy(u32 src, u32 dest, u32 size);
 void mem_set(u32 src, u32 size, unsigned char data);
-void* malloc(u32 size);
+// @param align - must be power of 2.
+void* malloc(u32 size, u32 align);
 
 #endif
