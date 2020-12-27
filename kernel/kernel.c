@@ -36,7 +36,7 @@ void kernel_main() {
   // Enable paging -> the very first PDE.
   page_table_t* pt1 = malloc(0x1000, 0x1000);
   for (int i = 0; i < 1024; i++) {
-    pt1->pte[i] = ((0x1000 * i) & 0xFFFFF) | 0b000000010011;
+    pt1->pte[i] = ((0x1000 * i) & ~0xFFF) | 0b000000010011;
   }
   pd.pde[0] = ((u32)pt1 & ~0xFFF) | 0b000000010011;
 
