@@ -4,4 +4,4 @@ i386elfgcc
 *.dis
 *.elf
 *.img
-
+kernel_padding
