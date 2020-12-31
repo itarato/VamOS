@@ -15,7 +15,7 @@ kernel.bin: kernel.elf
 	./tools/pad_kernel.sh
 
 kernel.elf: boot/kernel_entry.o ${OBJ}
-	i386-elf-ld -o $@ -Ttext 0x1000 $^
+	i386-elf-ld -o $@ -Ttext 0x100000 $^
 
 kernel.dis: kernel.bin
 	ndisasm -b 32 $< > $@

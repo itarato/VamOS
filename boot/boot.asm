@@ -1,5 +1,6 @@
 [org 0x7c00]
-KERNEL_OFFS equ 0x1000
+KERNEL_OFFS equ 0x100000
+KERNEL_16B_LOC equ 0x1000
 MEM_REGION_DATA equ 0x8000
 SMAP equ 0x0534d4150
 MEM_REQ_CODE equ 0xe820
@@ -33,7 +34,7 @@ load_kernel:
     mov bx, load_kernel_msg
     call print
 
-    mov bx, KERNEL_OFFS
+    mov bx, KERNEL_16B_LOC
     mov dh, 48
     mov dl, [boot_drive]
     call disk_load
