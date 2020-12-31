@@ -5,6 +5,7 @@
 
 // https://wiki.osdev.org/Memory_Map_(x86)
 
+// Set in boot.asm.
 #define MEM_REGION_ADDR 0x8000
 #define MEM_REGION_TYPE_USABLE 0x1
 

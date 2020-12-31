@@ -33,5 +33,5 @@ disk_load_sector_error:
     jmp $
 
 
-disk_load_error_msg: db 'Disk error!', 0x0
-disk_load_sector_error_msg: db 'Sector error!', 0x0
+disk_load_error_msg: db 'Disk err', 0x0
+disk_load_sector_error_msg: db 'Sector err', 0x0
