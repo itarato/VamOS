@@ -12,7 +12,6 @@ os-image.bin: boot/boot.bin kernel.bin
 
 kernel.bin: kernel.elf
 	i386-elf-objcopy -O binary $^ $@
-	./tools/pad_kernel.sh
 
 kernel.elf: boot/kernel_entry.o ${OBJ}
 	i386-elf-ld -o $@ -Ttext 0x100000 $^

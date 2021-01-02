@@ -9,6 +9,8 @@ The current memory map:
 - 0x1000 .. 0x7000 -> kernel temp load
 - 0x7c00 .. 0x7dff -> boot loader
 - 0x0010_0000 -> kernel copy destination + address
+- 0x20_0000 .. 0x20_0FFF-> Page directory
+- 0x20_1000 .. 0x20_1FFF-> 1st page table
 
 */
 
@@ -19,7 +21,7 @@ The current memory map:
 #define MEM_REGION_TYPE_USABLE 0x1
 
 // The first "usable" region is from 0x0 - however
-static u32 allocatable_mem_start = 0x200000;
+static u32 allocatable_mem_start = 0x202000;
 static mem_region_desc_t mem_region_desc;
 
 void setup_mem_regions() {
