@@ -14,7 +14,7 @@ kernel.bin: kernel.elf
 	i386-elf-objcopy -O binary $^ $@
 
 kernel.elf: boot/kernel_entry.o ${OBJ}
-	i386-elf-ld -o $@ -Ttext 0x100000 $^
+	i386-elf-ld -o $@ -Ttext 0xC0100000 $^
 
 kernel.dis: kernel.bin
 	ndisasm -b 32 $< > $@
